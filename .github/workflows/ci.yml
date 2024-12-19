@@ -20,7 +20,7 @@ jobs:
 
       - name: Run tests
         run: |
-          npm test
+          npx jest
 
       - name: Install Docker
         run: |
