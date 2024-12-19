@@ -87,12 +87,16 @@ jobs:
 
       - name: Deploy to Minikube
         run: |
-          kubectl apply -f deployment.yaml
+          kubectl apply -f deployment.yaml && sleep 20
 
       - name: Verify Deployment
         run: |
           kubectl get deployments
           kubectl get pods
+
+      - name: Apply Service File to Minikube
+        run: |
+          kubectl apply -f ./service.yaml
 
       - name: Expose Service and Get URL
         run: |
