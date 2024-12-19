@@ -52,7 +52,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: sarveshsd
-          password: ${{ secrets.DOCKER__PASSWORD }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
         run: |
