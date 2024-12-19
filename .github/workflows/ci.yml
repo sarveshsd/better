@@ -98,6 +98,10 @@ jobs:
         run: |
           kubectl apply -f ./service.yaml
 
+      - name: Expose the Service Using Minikube Tunnel
+        run: |
+          sudo minikube tunnel &
+
       - name: Expose Service and Get URL
         run: |
-          minikube service node-app-service --url --address 0.0.0.0
+          minikube service node-app-service --url
