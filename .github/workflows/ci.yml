@@ -61,4 +61,33 @@ jobs:
       - name: Push Docker image to DockerHub
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/node-app:latest
+      
 
+      - name: Install Minikube
+        run: |
+          curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+          sudo mv minikube-linux-amd64 /usr/local/bin/minikube
+          sudo chmod +x /usr/local/bin/minikube
+
+      - name: Start Minikube
+        run: |
+          minikube start --driver=docker
+
+      - name: Set up kubectl
+        run: |
+          minikube kubectl -- get pods
+          sudo cp /usr/local/bin/kubectl /usr/bin/kubectl
+          kubectl version --client
+
+      - name: Deploy to Minikube
+        run: |
+          kubectl apply -f deployment.yaml
+
+      - name: Verify Deployment
+        run: |
+          kubectl get deployments
+          kubectl get pods
+
+      - name: Expose Service and Get URL
+        run: |
+          minikube service node-app-service --url
