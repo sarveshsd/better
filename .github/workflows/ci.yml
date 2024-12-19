@@ -105,3 +105,18 @@ jobs:
       - name: Port-forward the service to localhost in the background
         run: |
           kubectl port-forward --address 0.0.0.0 svc/node-app-service 30080:80 &
+
+      - name: Notify Discord Deployment Success
+        if: success()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"content": "Deployment Successful: The app has been successfully deployed to Minikube!"}' \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
+
+      # Notify Discord on deployment failure
+      - name: Notify Discord Deployment Failure
+        if: failure()
+        run: |
+          curl -X POST -H "Content-Type: application/json" \
+            -d '{"content": "Deployment Failed: Something went wrong during deployment!"}' \
+            ${{ secrets.DISCORD_WEBHOOK_URL }}
