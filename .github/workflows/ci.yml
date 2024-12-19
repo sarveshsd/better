@@ -1,0 +1,42 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  docker:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Docker
+        run: |
+          if ! [ -x "$(command -v docker)" ]; then
+            echo "Installing Docker..."
+            curl -fsSL https://get.docker.com -o get-docker.sh
+            sh get-docker.sh
+            sudo usermod -aG docker $USER
+          else
+            echo "Docker is already installed"
+          fi
+
+      - name: Set permissions for Docker socket
+        run: |
+          sudo chmod +666 /var/run/docker.sock
+
+      - name: Log in to DockerHub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/node-app:latest .
+
+      - name: Push Docker image to DockerHub
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/node-app:latest
+
