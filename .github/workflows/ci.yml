@@ -69,6 +69,12 @@ jobs:
           sudo mv minikube-linux-amd64 /usr/local/bin/minikube
           sudo chmod +x /usr/local/bin/minikube
 
+      - name: Install kubectl
+        run: |
+          curl -LO https://dl.k8s.io/release/v1.23.0/bin/linux/amd64/kubectl
+          sudo mv kubectl /usr/local/bin/kubectl
+          sudo chmod +x /usr/local/bin/kubectl
+
       - name: Start Minikube
         run: |
           minikube start --driver=docker
