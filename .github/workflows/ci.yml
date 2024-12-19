@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-
+      - tests
 jobs:
   docker:
     runs-on: self-hosted
